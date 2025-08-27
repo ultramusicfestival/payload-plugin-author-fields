@@ -2,14 +2,7 @@
   "name": "@boomworks/payload-plugin-author-fields",
   "version": "2.0.0",
   "description": "Payload CMS plugin to add created & updated by fields",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "start": "tsc -w",
-    "build": "tsc",
-    "prepare": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/boomworks/payload-plugin-author-fields.git"
@@ -18,21 +11,39 @@
     "payload-plugin"
   ],
   "author": "Lindsay Evans <lindsay.evans@boomworks.com.au>",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/boomworks/payload-plugin-author-fields/issues"
   },
   "homepage": "https://github.com/boomworks/payload-plugin-author-fields#readme",
-  "peerDependencies": {
-	  "next": "^15.0.0",
-	  "payload": "^3.50.0",
-	  "react": "^19.0.0"
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "tsc -w",
+    "build": "tsc",
+    "lint": "eslint",
+    "lint:fix": "eslint ./src --fix",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@types/react": "npm:types-react@19.0.0-rc.1",
-    "payload": "^3.50.0",
-    "react": "^19.0.0",
-	"react-dom": "^19.0.0",
-    "typescript": "^5.7.2"
+    "@payloadcms/eslint-config": "^3.28.0",
+    "@types/react": "19.1.8",
+    "eslint": "^9.23.0",
+    "payload": "3.37.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "typescript": "5.7.3"
+  },
+  "peerDependencies": {
+    "payload": "^3.37.0"
+  },
+  "publishConfig": {
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+
   }
 }

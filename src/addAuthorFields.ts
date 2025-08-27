@@ -1,8 +1,8 @@
 import { Field, FieldAccess, PayloadRequest } from 'payload';
 import type { Config } from 'payload';
 
-import { PluginConfig } from './PluginConfig';
-import { authorHook } from './authorHook';
+import { PluginConfig } from './PluginConfig.js';
+import { authorHook } from './authorHook.js';
 
 const fieldReadAccess: FieldAccess = (args: { req: PayloadRequest }) =>
   Boolean(args.req.user);
@@ -61,7 +61,6 @@ export const addAuthorFields =
               editable: mergedConfig.createdByFieldEditable,
               usersSlug,
               pluginConfig: mergedConfig,
-              config,
             }),
             createField({
               slug: x.slug,
@@ -70,7 +69,6 @@ export const addAuthorFields =
               editable: mergedConfig.updatedByFieldEditable,
               usersSlug,
               pluginConfig: mergedConfig,
-              config,
             }),
           ];
         });
@@ -103,7 +101,6 @@ export const addAuthorFields =
               editable: mergedConfig.createdByFieldEditable,
               usersSlug,
               pluginConfig: mergedConfig,
-              config,
             }),
             createField({
               slug: x.slug,
@@ -112,7 +109,6 @@ export const addAuthorFields =
               editable: mergedConfig.updatedByFieldEditable,
               usersSlug,
               pluginConfig: mergedConfig,
-              config,
             }),
           ];
         });
@@ -128,7 +124,6 @@ const createField = ({
   editable,
   usersSlug,
   pluginConfig,
-  config,
 }: {
   slug: string;
   name: string;
@@ -138,7 +133,6 @@ const createField = ({
     | PluginConfig['updatedByFieldEditable'];
   usersSlug: string;
   pluginConfig: PluginConfig;
-  config: Config;
 }): Field => {
   let fieldLabel: string | Record<string, string>;
   if ((label as Function).call) {
@@ -154,11 +148,11 @@ const createField = ({
     isEditable = editable as boolean;
   }
 
-  const relationshipField: Field = {
+  return {
     name: name,
     label: fieldLabel,
     type: 'relationship',
-    relationTo: [usersSlug],
+    relationTo: usersSlug,
     defaultValue: (args: any) =>
       args.user
         ? {
@@ -178,6 +172,4 @@ const createField = ({
       // read: pluginConfig.fieldAccess,
     },
   };
-
-  return relationshipField;
 };

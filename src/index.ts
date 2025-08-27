@@ -1,2 +1,2 @@
-export * from './addAuthorFields';
-export * from './PluginConfig';
+export * from './addAuthorFields.js';
+export * from './PluginConfig.js';
