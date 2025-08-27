@@ -61,6 +61,7 @@ export const addAuthorFields =
               editable: mergedConfig.createdByFieldEditable,
               usersSlug,
               pluginConfig: mergedConfig,
+              config,
             }),
             ...createField({
               slug: x.slug,
@@ -69,6 +70,7 @@ export const addAuthorFields =
               editable: mergedConfig.updatedByFieldEditable,
               usersSlug,
               pluginConfig: mergedConfig,
+              config,
             }),
           ];
         });
@@ -101,6 +103,7 @@ export const addAuthorFields =
               editable: mergedConfig.createdByFieldEditable,
               usersSlug,
               pluginConfig: mergedConfig,
+              config,
             }),
             ...createField({
               slug: x.slug,
@@ -109,6 +112,7 @@ export const addAuthorFields =
               editable: mergedConfig.updatedByFieldEditable,
               usersSlug,
               pluginConfig: mergedConfig,
+              config,
             }),
           ];
         });
@@ -124,6 +128,7 @@ const createField = ({
   editable,
   usersSlug,
   pluginConfig,
+  config,
 }: {
   slug: string;
   name: string;
@@ -133,6 +138,7 @@ const createField = ({
     | PluginConfig['updatedByFieldEditable'];
   usersSlug: string;
   pluginConfig: PluginConfig;
+  config: Config;
 }): Field[] => {
   let fieldLabel: string | Record<string, string>;
   if ((label as Function).call) {
@@ -171,10 +177,14 @@ const createField = ({
     },
   };
 
+  const userCollection = config.collections?.find(c => c.slug === usersSlug);
+  const titleField = userCollection?.admin?.useAsTitle || 'id';
+  
   const virtualField: Field = {
     name: `${name}Name`,
     label: fieldLabel,
     type: 'text',
+    virtual: `${name}.${titleField}`,
     admin: {
       hidden: !pluginConfig.showInSidebar,
       readOnly: true,
@@ -187,42 +197,6 @@ const createField = ({
       create: () => false,
       update: () => false,
       read: pluginConfig.fieldAccess,
-    },
-    hooks: {
-      afterRead: [
-        async ({ data, req }: any) => {
-          if (!data || !data[name]) return '-';
-          
-          const relationshipData = data[name];
-          let userId: string;
-          
-          if (typeof relationshipData === 'string') {
-            userId = relationshipData;
-          } else if (relationshipData?.value) {
-            userId = relationshipData.value;
-          } else {
-            return pluginConfig.showUndefinedValues ? '-' : undefined;
-          }
-          
-          try {
-            const userDoc = await req.payload.findByID({
-              collection: usersSlug,
-              id: userId,
-              req,
-            });
-            
-            if (userDoc) {
-              const userCollection = req.payload.collections[usersSlug];
-              const titleField = userCollection.config.admin?.useAsTitle || 'id';
-              return userDoc[titleField] || userDoc.id;
-            }
-          } catch (error) {
-            console.error(`[payload-plugin-author-fields] Error fetching user with ID ${userId}:`, error);
-          }
-          
-          return pluginConfig.showUndefinedValues ? '-' : undefined;
-        },
-      ],
     },
   };
 
