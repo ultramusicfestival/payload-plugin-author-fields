@@ -1,9 +1,8 @@
-import { Config } from 'payload/config';
-import { Field, FieldAccess, PayloadRequest } from 'payload/types';
+import { Field, FieldAccess, PayloadRequest } from 'payload';
+import type { Config } from 'payload';
 
 import { PluginConfig } from './PluginConfig';
 import { authorHook } from './authorHook';
-import { getDisplayOnlyField } from './DisplayOnlyField/DisplayOnlyField';
 
 const fieldReadAccess: FieldAccess = (args: { req: PayloadRequest }) =>
   Boolean(args.req.user);
@@ -55,7 +54,7 @@ export const addAuthorFields =
 
           x.fields = [
             ...x.fields,
-            createField({
+            ...createField({
               slug: x.slug,
               name: mergedConfig.createdByFieldName,
               label: mergedConfig.createdByLabel,
@@ -63,7 +62,7 @@ export const addAuthorFields =
               usersSlug,
               pluginConfig: mergedConfig,
             }),
-            createField({
+            ...createField({
               slug: x.slug,
               name: mergedConfig.updatedByFieldName,
               label: mergedConfig.updatedByLabel,
@@ -95,7 +94,7 @@ export const addAuthorFields =
 
           x.fields = [
             ...x.fields,
-            createField({
+            ...createField({
               slug: x.slug,
               name: mergedConfig.createdByFieldName,
               label: mergedConfig.createdByLabel,
@@ -103,7 +102,7 @@ export const addAuthorFields =
               usersSlug,
               pluginConfig: mergedConfig,
             }),
-            createField({
+            ...createField({
               slug: x.slug,
               name: mergedConfig.updatedByFieldName,
               label: mergedConfig.updatedByLabel,
@@ -134,7 +133,7 @@ const createField = ({
     | PluginConfig['updatedByFieldEditable'];
   usersSlug: string;
   pluginConfig: PluginConfig;
-}): Field => {
+}): Field[] => {
   let fieldLabel: string | Record<string, string>;
   if ((label as Function).call) {
     fieldLabel = (label as Function).call({}, slug);
@@ -149,9 +148,8 @@ const createField = ({
     isEditable = editable as boolean;
   }
 
-  return {
+  const relationshipField: Field = {
     name: name,
-    label: fieldLabel,
     type: 'relationship',
     relationTo: [usersSlug],
     defaultValue: (args: any) =>
@@ -162,14 +160,8 @@ const createField = ({
           }
         : undefined,
     admin: {
-      hidden: !pluginConfig.showInSidebar,
+      hidden: true,
       readOnly: !isEditable,
-      position: 'sidebar',
-      components: {
-        Field: isEditable
-          ? undefined
-          : (props: any) => getDisplayOnlyField({ ...props, pluginConfig }),
-      },
       condition: () =>
         typeof window !== 'undefined' &&
         !window.location.pathname.includes('create-first-user'),
@@ -178,4 +170,61 @@ const createField = ({
       read: pluginConfig.fieldAccess,
     },
   };
+
+  const virtualField: Field = {
+    name: `${name}Name`,
+    label: fieldLabel,
+    type: 'text',
+    admin: {
+      hidden: !pluginConfig.showInSidebar,
+      readOnly: true,
+      position: 'sidebar',
+      condition: () =>
+        typeof window !== 'undefined' &&
+        !window.location.pathname.includes('create-first-user'),
+    },
+    access: {
+      create: () => false,
+      update: () => false,
+      read: pluginConfig.fieldAccess,
+    },
+    hooks: {
+      afterRead: [
+        async ({ data, req }: any) => {
+          if (!data || !data[name]) return '-';
+          
+          const relationshipData = data[name];
+          let userId: string;
+          
+          if (typeof relationshipData === 'string') {
+            userId = relationshipData;
+          } else if (relationshipData?.value) {
+            userId = relationshipData.value;
+          } else {
+            return pluginConfig.showUndefinedValues ? '-' : undefined;
+          }
+          
+          try {
+            const userDoc = await req.payload.findByID({
+              collection: usersSlug,
+              id: userId,
+              req,
+            });
+            
+            if (userDoc) {
+              const userCollection = req.payload.collections[usersSlug];
+              const titleField = userCollection.config.admin?.useAsTitle || 'id';
+              return userDoc[titleField] || userDoc.id;
+            }
+          } catch (error) {
+            console.error(`[payload-plugin-author-fields] Error fetching user with ID ${userId}:`, error);
+          }
+          
+          return pluginConfig.showUndefinedValues ? '-' : undefined;
+        },
+      ],
+    },
+  };
+
+  return [relationshipField, virtualField];
 };

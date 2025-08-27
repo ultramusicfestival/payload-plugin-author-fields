@@ -1,4 +1,4 @@
-import { PayloadRequest } from 'payload/types';
+import { PayloadRequest } from 'payload';
 
 export const authorHook = (
   updatedByFieldName: string,

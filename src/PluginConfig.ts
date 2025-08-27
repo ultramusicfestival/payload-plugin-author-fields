@@ -1,4 +1,4 @@
-import { FieldAccess } from 'payload/types';
+import { FieldAccess } from 'payload';
 
 export interface PluginConfig {
   /** Array of collection slugs to exclude */
