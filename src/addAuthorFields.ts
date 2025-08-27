@@ -169,7 +169,7 @@ const createField = ({
       //   !window.location.pathname.includes('create-first-user'),
     },
     access: {
-      // read: pluginConfig.fieldAccess,
+      read: pluginConfig.fieldAccess,
     },
   };
 };
