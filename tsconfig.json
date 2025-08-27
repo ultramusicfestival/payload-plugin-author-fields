@@ -17,19 +17,15 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true,
-    "emitDeclarationOnly": true,
-    "target": "ES2022",
-    "composite": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "declaration": true,
+    "target": "ES2022"
   },
   "include": [
     "./src/**/*.ts",
-    "./src/**/*.tsx",
-    "./dev/next-env.d.ts",
+    "./src/**/*.tsx"
   ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
