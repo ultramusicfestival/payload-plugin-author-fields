@@ -54,7 +54,7 @@ export const addAuthorFields =
 
           x.fields = [
             ...x.fields,
-            ...createField({
+            createField({
               slug: x.slug,
               name: mergedConfig.createdByFieldName,
               label: mergedConfig.createdByLabel,
@@ -63,7 +63,7 @@ export const addAuthorFields =
               pluginConfig: mergedConfig,
               config,
             }),
-            ...createField({
+            createField({
               slug: x.slug,
               name: mergedConfig.updatedByFieldName,
               label: mergedConfig.updatedByLabel,
@@ -96,7 +96,7 @@ export const addAuthorFields =
 
           x.fields = [
             ...x.fields,
-            ...createField({
+            createField({
               slug: x.slug,
               name: mergedConfig.createdByFieldName,
               label: mergedConfig.createdByLabel,
@@ -105,7 +105,7 @@ export const addAuthorFields =
               pluginConfig: mergedConfig,
               config,
             }),
-            ...createField({
+            createField({
               slug: x.slug,
               name: mergedConfig.updatedByFieldName,
               label: mergedConfig.updatedByLabel,
@@ -139,7 +139,7 @@ const createField = ({
   usersSlug: string;
   pluginConfig: PluginConfig;
   config: Config;
-}): Field[] => {
+}): Field => {
   let fieldLabel: string | Record<string, string>;
   if ((label as Function).call) {
     fieldLabel = (label as Function).call({}, slug);
@@ -156,6 +156,7 @@ const createField = ({
 
   const relationshipField: Field = {
     name: name,
+    label: fieldLabel,
     type: 'relationship',
     relationTo: [usersSlug],
     defaultValue: (args: any) =>
@@ -166,28 +167,8 @@ const createField = ({
           }
         : undefined,
     admin: {
-      // hidden: true,
-      readOnly: !isEditable,
-      // condition: () =>
-      //   typeof window !== 'undefined' &&
-      //   !window.location.pathname.includes('create-first-user'),
-    },
-    access: {
-      // read: pluginConfig.fieldAccess,
-    },
-  };
-
-  const userCollection = config.collections?.find(c => c.slug === usersSlug);
-  const titleField = userCollection?.admin?.useAsTitle || 'id';
-
-  const virtualField: Field = {
-    name: `${name}Name`,
-    label: fieldLabel,
-    type: 'text',
-    virtual: `${name}.${titleField}`,
-    admin: {
       // hidden: !pluginConfig.showInSidebar,
-      readOnly: true,
+      readOnly: !isEditable,
       position: 'sidebar',
       // condition: () =>
       //   typeof window !== 'undefined' &&
@@ -198,5 +179,5 @@ const createField = ({
     },
   };
 
-  return [relationshipField, virtualField];
+  return relationshipField;
 };
