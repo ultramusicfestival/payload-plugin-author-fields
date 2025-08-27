@@ -166,35 +166,35 @@ const createField = ({
           }
         : undefined,
     admin: {
-      hidden: true,
+      // hidden: true,
       readOnly: !isEditable,
-      condition: () =>
-        typeof window !== 'undefined' &&
-        !window.location.pathname.includes('create-first-user'),
+      // condition: () =>
+      //   typeof window !== 'undefined' &&
+      //   !window.location.pathname.includes('create-first-user'),
     },
     access: {
-      read: pluginConfig.fieldAccess,
+      // read: pluginConfig.fieldAccess,
     },
   };
 
   const userCollection = config.collections?.find(c => c.slug === usersSlug);
   const titleField = userCollection?.admin?.useAsTitle || 'id';
-  
+
   const virtualField: Field = {
     name: `${name}Name`,
     label: fieldLabel,
     type: 'text',
     virtual: `${name}.${titleField}`,
     admin: {
-      hidden: !pluginConfig.showInSidebar,
+      // hidden: !pluginConfig.showInSidebar,
       readOnly: true,
       position: 'sidebar',
-      condition: () =>
-        typeof window !== 'undefined' &&
-        !window.location.pathname.includes('create-first-user'),
+      // condition: () =>
+      //   typeof window !== 'undefined' &&
+      //   !window.location.pathname.includes('create-first-user'),
     },
     access: {
-      read: pluginConfig.fieldAccess,
+      // read: pluginConfig.fieldAccess,
     },
   };
 
