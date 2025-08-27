@@ -161,7 +161,7 @@ const createField = ({
           }
         : undefined,
     admin: {
-      // hidden: !pluginConfig.showInSidebar,
+      hidden: !pluginConfig.showInSidebar,
       readOnly: !isEditable,
       position: 'sidebar',
       // condition: () =>
