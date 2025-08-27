@@ -155,10 +155,7 @@ const createField = ({
     relationTo: usersSlug,
     defaultValue: (args: any) =>
       args.user
-        ? {
-            relationTo: usersSlug,
-            value: args.user.id,
-          }
+        ? args.user.id
         : undefined,
     admin: {
       hidden: !pluginConfig.showInSidebar,
