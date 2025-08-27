@@ -194,8 +194,6 @@ const createField = ({
         !window.location.pathname.includes('create-first-user'),
     },
     access: {
-      create: () => false,
-      update: () => false,
       read: pluginConfig.fieldAccess,
     },
   };
