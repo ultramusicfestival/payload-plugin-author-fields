@@ -161,9 +161,7 @@ const createField = ({
       hidden: !pluginConfig.showInSidebar,
       readOnly: !isEditable,
       position: 'sidebar',
-      // condition: () =>
-      //   typeof window !== 'undefined' &&
-      //   !window.location.pathname.includes('create-first-user'),
+      condition: (data, siblingData, { user }) => Boolean(user),
     },
     access: {
       read: pluginConfig.fieldAccess,
