@@ -2,7 +2,6 @@ import { PayloadRequest } from 'payload';
 
 export const authorHook = (
   updatedByFieldName: string,
-  userSlug: string
 ): any => {
   return async (args: {
     data: any;
@@ -15,10 +14,7 @@ export const authorHook = (
       args.req.user !== undefined &&
       args.req.user !== null
     ) {
-      args.data[updatedByFieldName] = {
-        relationTo: userSlug,
-        value: args.req.user.id,
-      };
+      args.data[updatedByFieldName] = args.req.user.id;
     }
 
     return args.data;

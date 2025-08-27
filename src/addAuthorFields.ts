@@ -48,7 +48,7 @@ export const addAuthorFields =
             ...x.hooks,
             beforeChange: [
               ...((x.hooks && x.hooks.beforeChange) || []),
-              authorHook(mergedConfig.updatedByFieldName, usersSlug),
+              authorHook(mergedConfig.updatedByFieldName),
             ],
           };
 
@@ -88,7 +88,7 @@ export const addAuthorFields =
             ...x.hooks,
             beforeChange: [
               ...((x.hooks && x.hooks.beforeChange) || []),
-              authorHook(mergedConfig.updatedByFieldName, usersSlug),
+              authorHook(mergedConfig.updatedByFieldName),
             ],
           };
 
