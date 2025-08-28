@@ -26,7 +26,6 @@
     "build": "cross-env NODE_OPTIONS=--no-deprecation tsc",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint",
     "lint:fix": "cross-env NODE_OPTIONS=--no-deprecation eslint ./src --fix",
-    "prepare": "cross-env NODE_OPTIONS=--no-deprecation yarn run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
