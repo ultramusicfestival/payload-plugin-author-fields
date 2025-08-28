@@ -1,20 +1,20 @@
 {
-  "name": "@boomworks/payload-plugin-author-fields",
+  "name": "@ultramusicfestival/payload-plugin-author-fields",
   "version": "2.0.0",
   "description": "Payload CMS plugin to add created & updated by fields",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/boomworks/payload-plugin-author-fields.git"
+    "url": "git+https://github.com/ultramusicfestival/payload-plugin-author-fields.git"
   },
   "keywords": [
     "payload-plugin"
   ],
   "author": "Lindsay Evans <lindsay.evans@boomworks.com.au>",
   "bugs": {
-    "url": "https://github.com/boomworks/payload-plugin-author-fields/issues"
+    "url": "https://github.com/ultramusicfestival/payload-plugin-author-fields/issues"
   },
-  "homepage": "https://github.com/boomworks/payload-plugin-author-fields#readme",
+  "homepage": "https://github.com/ultramusicfestival/payload-plugin-author-fields#readme",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -42,10 +42,8 @@
   "peerDependencies": {
     "payload": "^3.37.0"
   },
-  "optionalDependencies": {
-    "@esbuild/linux-x64": "0.24.0"
-  },
   "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts"
   },
