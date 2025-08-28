@@ -33,7 +33,7 @@
     "@payloadcms/eslint-config": "^3.28.0",
     "@types/react": "19.1.8",
     "cross-env": "^10.0.0",
-    "eslint": "^9.23.0",
+    "eslint": "^9.34.0",
     "payload": "3.37.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -41,6 +41,9 @@
   },
   "peerDependencies": {
     "payload": "^3.37.0"
+  },
+  "optionalDependencies": {
+    "@esbuild/linux-x64": "0.24.0"
   },
   "publishConfig": {
     "main": "./dist/index.js",
