@@ -18,7 +18,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "declaration": true,
-    "target": "ES2022"
+    "target": "ES2022",
+    "tsBuildInfoFile": null
   },
   "include": [
     "./src/**/*.ts",
